@@ -4,35 +4,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Timesheets Prototype</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css"/>
+
+<link rel="stylesheet" href="./css/bootstrap-material-datetimepicker.css" />
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/ripples.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/material.min.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/FezVrasta/bootstrap-material-design/master/dist/js/material.min.js"></script>
+		<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+		<script type="text/javascript" src="./js/bootstrap-material-datetimepicker.js"></script>
+
+
 <style>
 body {
-    color: #4f6f45;
+
     background-image: url(background.jpg);
 	background-size: cover;
     font-family: 'Open Sans', sans-serif;
-	font-size: 13px;
+    font-size: 13px;
+    padding: 1% 10% 1% 10%;
+    z-index:1;
 }
 .table-wrapper {
-    width: 1100px;
-    margin: 30px auto;
-    background: #fff;
-    padding: 20px;
+    width: 100%;
+    margin: 30px auto;   
+    padding: 2%;
 	box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 
+.inp1 {
+    width:80%;
+    text-align: center;   
+}
 
-.table-wrapper-small {
-    width: 800px;
-    margin: 30px auto;
-    padding: 20px;	
-    box-shadow: 0 2px 2px rgba(0,0,0,.05);
+#TimeSheet td{
+    text-align: center;
+    background: #045683;   
 }
 
 td.table-wrapper-small {
@@ -40,10 +56,30 @@ td.table-wrapper-small {
     font-weight: bold;
 }
 
+#BaseRate {
+    background: #ffffff;
+    color: #000000;
+    font-weight: bold;
+}
+
+.table-wrapper-small {
+    width: 75%;
+    margin: 30px auto;
+    padding: 15px;	
+    box-shadow: 0 2px 2px rgba(0,0,0,.05);
+}
+
+
+.table-wrapper-small td{
+    background: #5678aa;
+    font-weight: bold;
+    color: #ffffff;
+}
 
 
 .table-title {
-    padding-bottom: 10px;
+    color: #eb4f06;
+    padding-left: 20%;
     margin: 0 0 10px;
 }
 .table-title h2 {
@@ -52,6 +88,7 @@ td.table-wrapper-small {
 }
 .table-title .buttn1 {
     float: right;
+    background: #5678aa;
     height: 30px;
     font-weight: bold;
     font-size: 13px;
@@ -70,7 +107,7 @@ table.table {
 table.table th{
     margin: auto;
     width: 60%;
-        padding: 10px;
+    padding: 5px;
 }
 
 table.table .GrnHdr1{
@@ -78,120 +115,90 @@ background-color:#42d97c;
 color:white;
 }
 
-
-table.table .BluHdr1{
-background-color:#5678aa; 
-color:white;
-}
-table.table .BluHdr2{
-background-color:#3488aa; 
-color:white;
-}
-table.table .BluHdr3{
-background-color:#2366aa; 
-color:white;
-}
 table.table .BluHdr0{
 background-color: #4455dd;
 color:white;
 text-align: center;
 }
 
+table.table .BluHdr1{
+background-color:#5678aa; 
+color:white;
+text-align: center;
+}
+table.table .BluHdr2{
+background-color:#3488aa; 
+color:white;
+text-align: center;
+}
+table.table .BluHdr3{
+background-color:#2366aa; 
+color:white;
+text-align: center;
+}
+
 table.table tr th, table.table tr td {
     border-color: #e9e9e9;
-    width: 75px;
+    width: 10%;
+    height: 35px;
     margin: auto;    
-    padding: 8px;
+    padding: 10px;
+
 }
 table.table th {
-    width: 75px;
+    width: 10%;
+    text-align: center;
 }
-table.table th i {
-    font-size: 13px;
-    margin: 0 5px;
-    cursor: pointer;
-}
-
-table.table td a {
-    cursor: pointer;
-    display: inline-block;
-    margin: 0 5px;
-    min-width: 24px;
-}    
-table.table td a.add {
-    color: #27C46B;
-}
-table.table td a.edit {
-    color: #FFC107;
-}
-
-table.table td i {
-    font-size: 24px;
-}
-table.table td a.add i {
-    font-size: 24px;
-    margin-right: -1px;
-    position: relative;
-    top: 3px;
-}    
+    
 table.table .form-control {
-    height: 20px;
-    line-height: 13px;
+    height: 18px;
+    line-height: 15px;
     box-shadow: none;
     border-radius: 5px;
+    font-size: 13px;
+    padding: 5px;
 }
 table.table .form-control.error {
     border-color: #f50000;
 }
-table.table td .add {
-    display: none;
-}
+
 </style>
 
 
 <script>
 
-$(document).ready(function(){
+$(document).ready(function(){   
+  
 	$('[data-toggle="tooltip"]').tooltip();
 	var actions = $("table td:last-child").html();
 
     $('#TimeSheet td').on('click', function(event){
         var name = $(this).attr('data-field');
         var value = $(this).text();
-        var $input = $('<input>');
+        var $input = $('<input>');        
         
         $input.attr({
-            'name': name,
-            'class' : 'form-control',
-            'id': name,
-            'type':'text'
-        });    
+            'name': 'time',
+            'type':'text',
+            'class': 'form-control',
+            'id' : 'time'
+        });
 
         $input.val(value);
-
         $input.on('click',function(event){
-            event.preventDefault();
+            //event.preventDefault();
             event.stopPropagation();
-        });
-  
-        $input.on('blur',function(){            
-            console.log("Blur value is : " + $(this).val());
-            var rIndex = $(this).parent().parent().index();
-            var cIndex = $(this).parent().index();
-            console.log("Row index: "      + rIndex);
-            console.log("Column index: "   + cIndex);
-            $(this).parent().text($(this).val());
-            calcValues(rIndex,cIndex);
+            bootstrapMaterialDatePicker({ date: false });
         });
   
     $(this).html($input);
     $input.focus();
     });
 
-
     $('#BaseRate').on('click', function(event){
         var name = $(this).attr('data-field');
         var value = $(this).text();
+        var rate;
         var $input = $('<input>');
         
         $input.attr({
@@ -203,25 +210,14 @@ $(document).ready(function(){
 
         $input.val(value);
 
-        $input.on('click',function(event){
-            event.preventDefault();
-            event.stopPropagation();
-        });
   
         $input.on('blur',function(){            
             console.log("Rates Tab Blur value is : " + $(this).val());
-            var rIndex = $(this).parent().parent().index();
-            var cIndex = $(this).parent().index();
-            console.log("Row index: "      + rIndex);
-            console.log("Column index: "   + cIndex);
-            $(this).parent().text($(this).val());
-            var rate = $(this).val();
+            rate = $(this).val();
             console.log("Rate is : $"   + rate);
-            $('#RatesTab').find('tr').eq(rIndex+1).find('td').eq(cIndex-1).text(rate*1.5);  
-            $('#RatesTab').find('tr').eq(rIndex+2).find('td').eq(cIndex-1).text(rate*2); 
-
-            $('#SummaryTab').find('tr').eq(rIndex+1).find('td').eq(cIndex-1).text(rate*1.5);  
-
+            $('#BaseRate').text(rate);
+            $('#OverTimeRate').text(rate*1.5);
+            $('#DoubleTimeRate').text(rate*2);
         });
   
     $(this).html($input);
@@ -229,39 +225,46 @@ $(document).ready(function(){
     });
 
 });
-
-    
-    
-
-
-///////////////////56f97c
-
 	
-	
-		
-function calcValues(rowIndex,columnIndex) {  
+function calcValues() {
+
     console.log("Inside calcValues():");
-    console.log("Row index: "      + rowIndex);
-    console.log("Column index: "   + columnIndex);
 
-    var inTime = $('#InTimesRows').find('td').eq(columnIndex-1).text();
-    var outTime = $('#OutTimesRows').find('td').eq(columnIndex-1).text();
+    totalPay = 0;
+    weekHours = 0;
+    var rate = $('#BaseRate').text();
+    var overtimerate = $('#OverTimeRate').text();
+    var doubletimerate = $('#DoubleTimeRate').text();
 
-    console.log("Trying to get values for InTimes and OutTimes of : [" + rowIndex + "][" + columnIndex + "]");    
-    console.log("In-time is :" + inTime);
-    console.log("Out-time is :" + outTime);
+    for (var i = 0; i < 7; i++) {
+        var inTime = $('#InTimesRows').find('td').eq(i).find('input').val();
+        var outTime = $('#OutTimesRows').find('td').eq(i).find('input').val();
+        var totLogged = timeDiff(inTime,outTime).split("|"); 
+        console.log("In-time is :" + inTime);
+        console.log("Out-time is :" + outTime);
+        console.log("Rates are : " + rate + ", " + doubletimerate + ", " + overtimerate);
+        tt = totLogged[0];
+        rt = totLogged[1];
+        ot = totLogged[2];
+        dt = totLogged[3];
+        console.log("Total logged hours : " + tt);    
+        console.log("Regular hours : " + rt);
+        console.log("OverTime hours : " + ot);
+        console.log("DoubleTime hours : " + dt);  
+        $('#TotTimes').find('tr').eq(0).find('td').eq(i).text(totLogged[0]);
+        $('#HoursDetail').find('tr').eq(0).find('td').eq(i).text(totLogged[1]);
+        $('#HoursDetail').find('tr').eq(1).find('td').eq(i).text(totLogged[2]);        
+        $('#HoursDetail').find('tr').eq(2).find('td').eq(i).text(totLogged[3]);
 
-    var totLogged = timeDiff(inTime,outTime).split("|");
-    console.log("Total logged hours : " + totLogged[0]);
-    console.log("Regular hours : " + totLogged[1]);
-    console.log("OverTime hours : " + totLogged[2]);
-    console.log("DoubleTime hours : " + totLogged[3]);
+        weekHours = (weekHours + tt);
 
-    $('#TotTimes').find('tr').eq(0).find('td').eq(columnIndex-1).text(totLogged[0]);
-    $('#HoursDetail').find('tr').eq(0).find('td').eq(columnIndex-1).text(totLogged[1]);
-    $('#HoursDetail').find('tr').eq(1).find('td').eq(columnIndex-1).text(totLogged[2]);        
-    $('#HoursDetail').find('tr').eq(2).find('td').eq(columnIndex-1).text(totLogged[3]);        
-   
+        totalPay = ( totalPay + (rate * rt) + (overtimerate * ot) + (doubletimerate * dt));
+    }
+
+    $('#TotalWeekHours').text(weekHours);
+
+    $('#TotalPay').text(totalPay);
+
 }
 
 function timeDiff(start, end) {
@@ -322,6 +325,7 @@ function getJSON(XMLHttpRequest) {
 </head>
 
 <body>
+
 <div class="container-lg">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -334,7 +338,7 @@ function getJSON(XMLHttpRequest) {
                     </div>
                 </div>
             </div>
-			
+
             <table id="TimeSheet" class="table table-bordered">
                     <tr class="BluHdr0">
 						<th>Day of week</th>
@@ -358,23 +362,23 @@ function getJSON(XMLHttpRequest) {
                     </tr>
                  <tr id="InTimesRows">
 						<th class="BluHdr2">In-Time</th>
-                        <td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>						
+                        <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>						
                 </tr>                    
 				<tr id="OutTimesRows"> 
 						<th class="BluHdr3">Out-Time</th>
-                        <td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>
-						<td>00:00</td>						
+                        <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
+						<td><input type='text' name='time' class='inp1' value='00:00'/></td>						
                 </tr>
             </table>       
 				
@@ -390,8 +394,7 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>	                        
                      </tr>				
             </table>
-
-        </div>
+   </div> 
 
 	    <table id="HoursDetail"class="table table-bordered">
                     <tr class="BluHdr1">
@@ -441,11 +444,11 @@ function getJSON(XMLHttpRequest) {
                             </tr>
                             <tr>
                                 <th class="BluHdr2">Overtime Pay Rate</th>
-                                <td class="table-wrapper-small">0</td>
+                                <td id="OverTimeRate">0</td>
                             </tr>
                             <tr>
                                 <th class="BluHdr3">Double time pay rate</th>
-                                <td class="table-wrapper-small">0</td>
+                                <td id="DoubleTimeRate" >0</td>
                             </tr>                          
                     </table> 
                 </div>
@@ -457,20 +460,33 @@ function getJSON(XMLHttpRequest) {
                 </tr>
                 <tr class="BluHdr1">
                     <th>Total Hours</th>
-                    <td>0</td>
+                    <td id="TotalWeekHours">0</td>
                 </tr>
                 <tr class="BluHdr2">
                     <th>Total Pay</th>
-                    <td>0</td>
-                </tr>
-                "}|             
+                    <td id="TotalPay">0</td>
+                </tr>            
             </table> 
         </div>
 
     </div>
 </div>            
  </div>
-        
-</div>     
+
+ </div>
+
+ <script>
+            $('.inp1').bootstrapMaterialDatePicker
+			({
+				date: false, format: 'kk:mm'
+			}).on('change', function(e, date)
+			{
+                console.log('Inside change method: ' + $(this).text);
+                calcValues();
+
+            });
+
+ </script>
+
 </body>
 </html>

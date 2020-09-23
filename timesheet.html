@@ -30,14 +30,15 @@ body {
     background-image: url(background.jpg);
 	background-size: cover;
     font-family: 'Open Sans', sans-serif;
+    color: #ffffff;
     font-size: 13px;
-    padding: 1% 10% 1% 10%;
+    padding: 2% 10% 2% 10%;
     z-index:1;
 }
 .table-wrapper {
-    width: 100%;
+    width: 90%;
     margin: 30px auto;   
-    padding: 2%;
+    padding: 1%;
 	box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 
@@ -89,6 +90,7 @@ td.table-wrapper-small {
 .table-title .buttn1 {
     float: right;
     background: #5678aa;
+    color: #ffffff;
     height: 30px;
     font-weight: bold;
     font-size: 13px;
@@ -98,7 +100,7 @@ td.table-wrapper-small {
     line-height: 13px;
 }
 .table-title .buttn1 i {
-    margin-right: 4px;
+    
 }
 table.table {
     table-layout: fixed;
@@ -218,10 +220,12 @@ $(document).ready(function(){
             $('#BaseRate').text(rate);
             $('#OverTimeRate').text(rate*1.5);
             $('#DoubleTimeRate').text(rate*2);
+            calcValues();
         });
   
     $(this).html($input);
     $input.focus();
+    
     });
 
 });
@@ -243,10 +247,10 @@ function calcValues() {
         console.log("In-time is :" + inTime);
         console.log("Out-time is :" + outTime);
         console.log("Rates are : " + rate + ", " + doubletimerate + ", " + overtimerate);
-        tt = totLogged[0];
-        rt = totLogged[1];
-        ot = totLogged[2];
-        dt = totLogged[3];
+        tt = parseInt(totLogged[0]);
+        rt = parseInt(totLogged[1]);
+        ot = parseInt(totLogged[2]);
+        dt = parseInt(totLogged[3]);
         console.log("Total logged hours : " + tt);    
         console.log("Regular hours : " + rt);
         console.log("OverTime hours : " + ot);
@@ -394,7 +398,7 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>	                        
                      </tr>				
             </table>
-   </div> 
+   
 
 	    <table id="HoursDetail"class="table table-bordered">
                     <tr class="BluHdr1">
@@ -428,7 +432,9 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>
                     </tr>
 			
-		</table>	
+        </table>
+        
+    </div> 
         
         
 		<div class="table-wrapper-small">

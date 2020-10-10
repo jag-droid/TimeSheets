@@ -27,10 +27,11 @@
 <style>
 body {
 
-    background-image: url(background.jpg);
+   /* background-image: url(backgrond.jpg);*/
+    background-color: #5e4e4e;
 	background-size: cover;
     font-family: 'Open Sans', sans-serif;
-    color: #ffffff;
+
     font-size: 13px;
     padding: 2% 10% 2% 10%;
     z-index:1;
@@ -74,7 +75,7 @@ td.table-wrapper-small {
 .table-wrapper-small td{
     background: #5678aa;
     font-weight: bold;
-    color: #ffffff;
+
 }
 
 
@@ -99,9 +100,7 @@ td.table-wrapper-small {
     border-radius: 50px;
     line-height: 13px;
 }
-.table-title .buttn1 i {
-    
-}
+
 table.table {
     table-layout: fixed;
 }
@@ -174,6 +173,7 @@ $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	var actions = $("table td:last-child").html();
 
+
     $('#TimeSheet td').on('click', function(event){
         var name = $(this).attr('data-field');
         var value = $(this).text();
@@ -186,16 +186,14 @@ $(document).ready(function(){
             'id' : 'time'
         });
 
-        $input.val(value);
         $input.on('click',function(event){
-            //event.preventDefault();
+            event.preventDefault();
             event.stopPropagation();
-            bootstrapMaterialDatePicker({ date: false });
         });
   
     $(this).html($input);
     $input.focus();
-    });
+    }); 
 
     $('#BaseRate').on('click', function(event){
         var name = $(this).attr('data-field');
@@ -211,15 +209,14 @@ $(document).ready(function(){
         });    
 
         $input.val(value);
-
   
         $input.on('blur',function(){            
             console.log("Rates Tab Blur value is : " + $(this).val());
             rate = $(this).val();
             console.log("Rate is : $"   + rate);
-            $('#BaseRate').text(rate);
-            $('#OverTimeRate').text(rate*1.5);
-            $('#DoubleTimeRate').text(rate*2);
+            $('#BaseRate').text("$" + rate);
+            $('#OverTimeRate').text("$" + rate*1.5);
+            $('#DoubleTimeRate').text("$" + rate*2);
             calcValues();
         });
   
@@ -236,12 +233,13 @@ function calcValues() {
 
     totalPay = 0;
     weekHours = 0;
-    var rate = $('#BaseRate').text();
+    var rate = $('#BaseRate').text().replace("$","");
     var overtimerate = $('#OverTimeRate').text();
     var doubletimerate = $('#DoubleTimeRate').text();
 
     for (var i = 0; i < 7; i++) {
         var inTime = $('#InTimesRows').find('td').eq(i).find('input').val();
+        $('#InTimesRows').find('td').eq(i).find('input').val(inTime);
         var outTime = $('#OutTimesRows').find('td').eq(i).find('input').val();
         var totLogged = timeDiff(inTime,outTime).split("|"); 
         console.log("In-time is :" + inTime);
@@ -251,10 +249,12 @@ function calcValues() {
         rt = parseInt(totLogged[1]);
         ot = parseInt(totLogged[2]);
         dt = parseInt(totLogged[3]);
+        mt = parseInt(totLogged[4]);
         console.log("Total logged hours : " + tt);    
         console.log("Regular hours : " + rt);
         console.log("OverTime hours : " + ot);
         console.log("DoubleTime hours : " + dt);  
+        console.log("Total minutes : " + mt);
         $('#TotTimes').find('tr').eq(0).find('td').eq(i).text(totLogged[0]);
         $('#HoursDetail').find('tr').eq(0).find('td').eq(i).text(totLogged[1]);
         $('#HoursDetail').find('tr').eq(1).find('td').eq(i).text(totLogged[2]);        
@@ -262,12 +262,15 @@ function calcValues() {
 
         weekHours = (weekHours + tt);
 
-        totalPay = ( totalPay + (rate * rt) + (overtimerate * ot) + (doubletimerate * dt));
+        totalPay = ( totalPay + (rate * rt) + (overtimerate * ot) + (doubletimerate * dt) + (rate * ( mt / 60 )) );
+
     }
 
-    $('#TotalWeekHours').text(weekHours);
+    $('#TotalWeekHours').text("xyz");
 
     $('#TotalPay').text(totalPay);
+
+    console.log("End of calc values");
 
 }
 
@@ -287,6 +290,7 @@ function timeDiff(start, end) {
     var rtStr = "";
     var otStr = "";
     var dtStr = "";
+    var minutesStr = "";
     var rtHours = 0;
     var otHours = 0;
     var dtHours = 0;
@@ -298,7 +302,7 @@ function timeDiff(start, end) {
         rtHours = hours;
         rtStr = "" + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;     
         otStr = "00:00";
-        dtStr = "00:00";        
+        dtStr = "00:00";              
     } else if ( totalDiff > 28800000 && totalDiff <= 43200000){
         otHours = hours - 8;
         rtStr = "08:00";        
@@ -311,8 +315,9 @@ function timeDiff(start, end) {
         dtStr = "" + dtHours + ":" + (minutes <= 9 ? "0" : "") + minutes;
     }
 
+    minutesStr = "" + minutes; 
     var totHours =  (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
-    return "" + totHours + "|" + rtStr + "|" + otStr + "|" + dtStr;  
+    return "" + totHours + "|" + rtStr + "|" + otStr + "|" + dtStr + "|" + minutesStr;  
 }
 
 function getJSON(XMLHttpRequest) {
@@ -335,7 +340,7 @@ function getJSON(XMLHttpRequest) {
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2><b>Overtime Calculator </b></h2></div>
+                    <div class="col-sm-8"><h2><b>California Time Card calculator</b></h2></div>
                     <div class="col-sm-4">
                         <button type="button" class="btn btn-info buttn1"></i>Reset</button> 
 						<button type="button" class="btn btn-info buttn1"></i>Submit</button>
@@ -352,7 +357,8 @@ function getJSON(XMLHttpRequest) {
                         <th>Thursday</th>
 						<th>Friday</th>
 						<th>Saturday</th>
-						<th>Sunday</th>
+                        <th>Sunday</th>
+                        <th>Total</th>
                     </tr>
 					<tr class="BluHdr1">
 						<th>Date</th>
@@ -362,7 +368,8 @@ function getJSON(XMLHttpRequest) {
                         <th>04-Aug-20</th>
 						<th>05-Aug-20</th>
 						<th>06-Aug-20</th>
-						<th>07-Aug-20</th>
+                        <th>07-Aug-20</th>
+                        <th></th>
                     </tr>
                  <tr id="InTimesRows">
 						<th class="BluHdr2">In-Time</th>
@@ -372,7 +379,8 @@ function getJSON(XMLHttpRequest) {
 						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
 						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
 						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
-						<td><input type='text' name='time' class='inp1' value='00:00'/></td>						
+                        <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                        <td><input type='text' name='time' class='inp1' value='00:00'/></td>						
                 </tr>                    
 				<tr id="OutTimesRows"> 
 						<th class="BluHdr3">Out-Time</th>
@@ -382,8 +390,20 @@ function getJSON(XMLHttpRequest) {
 						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
 						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
 						<td><input type='text' name='time' class='inp1' value='00:00'/></td>
-						<td><input type='text' name='time' class='inp1' value='00:00'/></td>						
+                        <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                        <td><input type='text' name='time' class='inp1' value='00:00'/></td>						
                 </tr>
+                <tr id="LunchBreakRows"> 
+                    <th class="BluHdr3">Lunch Break</th>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>
+                    <td><input type='text' name='time' class='inp1' value='00:00'/></td>						
+            </tr>
             </table>       
 				
 	         <table id="TotTimes" class="table table-bordered">                 
@@ -395,7 +415,8 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>
 						<td>00:00</td>
 						<td>00:00</td>
-						<td>00:00</td>	                        
+                        <td>00:00</td>
+                        <td>00:00</td>
                      </tr>				
             </table>
    
@@ -409,7 +430,8 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>
 						<td>00:00</td>
 						<td>00:00</td>
-						<td>00:00</td>
+                        <td>00:00</td>
+                        <td>00:00</td>
                     </tr>
 					<tr class="BluHdr2">
 						<th>Over time (OT)</th>
@@ -419,7 +441,8 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>
 						<td>00:00</td>
 						<td>00:00</td>
-						<td>00:00</td>
+                        <td>00:00</td>
+                        <td>00:00</td>
                     </tr>
 					 <tr class="BluHdr3">
 						<th>Double Time (DT)</th>
@@ -429,7 +452,8 @@ function getJSON(XMLHttpRequest) {
 						<td>00:00</td>
 						<td>00:00</td>
 						<td>00:00</td>
-						<td>00:00</td>
+                        <td>00:00</td>
+                        <td>00:00</td>
                     </tr>
 			
         </table>
@@ -446,15 +470,15 @@ function getJSON(XMLHttpRequest) {
                             </tr>
                             <tr>
                                 <th class="BluHdr1">Regular Pay Rate</th>
-                                <td id="BaseRate" class="table-wrapper-small">0</td>
+                                <td id="BaseRate" class="table-wrapper-small">$0</td>
                             </tr>
                             <tr>
                                 <th class="BluHdr2">Overtime Pay Rate</th>
-                                <td id="OverTimeRate">0</td>
+                                <td id="OverTimeRate">$0</td>
                             </tr>
                             <tr>
                                 <th class="BluHdr3">Double time pay rate</th>
-                                <td id="DoubleTimeRate" >0</td>
+                                <td id="DoubleTimeRate" >$0</td>
                             </tr>                          
                     </table> 
                 </div>
@@ -470,7 +494,7 @@ function getJSON(XMLHttpRequest) {
                 </tr>
                 <tr class="BluHdr2">
                     <th>Total Pay</th>
-                    <td id="TotalPay">0</td>
+                    <td id="TotalPay">$0</td>
                 </tr>            
             </table> 
         </div>
@@ -486,8 +510,7 @@ function getJSON(XMLHttpRequest) {
 			({
 				date: false, format: 'kk:mm'
 			}).on('change', function(e, date)
-			{
-                console.log('Inside change method: ' + $(this).text);
+			{               
                 calcValues();
 
             });

@@ -27,7 +27,7 @@
 <style>
 body {
 
-   /* background-image: url(backgrond.jpg);*/
+    background-image: url(images/maroon1.jpg);
     background-color: #5e4e4e;
 	background-size: cover;
     font-family: 'Open Sans', sans-serif;
@@ -50,7 +50,7 @@ body {
 
 #TimeSheet td{
     text-align: center;
-    background: #045683;   
+    background: #b17979;   
 }
 
 td.table-wrapper-small {
@@ -73,7 +73,7 @@ td.table-wrapper-small {
 
 
 .table-wrapper-small td{
-    background: #5678aa;
+    background: #b17979;
     font-weight: bold;
 
 }
@@ -90,7 +90,7 @@ td.table-wrapper-small {
 }
 .table-title .buttn1 {
     float: right;
-    background: #5678aa;
+    background: #aa7f56;
     color: #ffffff;
     height: 30px;
     font-weight: bold;
@@ -112,28 +112,29 @@ table.table th{
 }
 
 table.table .GrnHdr1{
-background-color:#42d97c; 
+background-color:#a55555; 
 color:white;
+text-align: center;
 }
 
 table.table .BluHdr0{
-background-color: #4455dd;
+background-color: #a55555;
 color:white;
 text-align: center;
 }
 
 table.table .BluHdr1{
-background-color:#5678aa; 
+background-color:#a55555; 
 color:white;
 text-align: center;
 }
 table.table .BluHdr2{
-background-color:#3488aa; 
+background-color:#a55555; 
 color:white;
 text-align: center;
 }
 table.table .BluHdr3{
-background-color:#2366aa; 
+background-color:#a55555; 
 color:white;
 text-align: center;
 }
@@ -214,9 +215,9 @@ $(document).ready(function(){
             console.log("Rates Tab Blur value is : " + $(this).val());
             rate = $(this).val();
             console.log("Rate is : $"   + rate);
-            $('#BaseRate').text("$" + rate);
-            $('#OverTimeRate').text("$" + rate*1.5);
-            $('#DoubleTimeRate').text("$" + rate*2);
+            $('#BaseRate').text(rate);
+            $('#OverTimeRate').text(rate*1.5);
+            $('#DoubleTimeRate').text(rate*2);
             calcValues();
         });
   
@@ -238,23 +239,34 @@ function calcValues() {
     var doubletimerate = $('#DoubleTimeRate').text();
 
     for (var i = 0; i < 7; i++) {
+
         var inTime = $('#InTimesRows').find('td').eq(i).find('input').val();
-        $('#InTimesRows').find('td').eq(i).find('input').val(inTime);
+        
+        //$('#InTimesRows').find('td').eq(i).find('input').val(inTime);
+        
         var outTime = $('#OutTimesRows').find('td').eq(i).find('input').val();
-        var totLogged = timeDiff(inTime,outTime).split("|"); 
+        
+        var lunchBreak = $('#LunchBreakRows').find('td').eq(i).find('input').val();
+        
+        var totLogged = timeDiff(inTime,outTime,lunchBreak).split("|"); 
+        
         console.log("In-time is :" + inTime);
         console.log("Out-time is :" + outTime);
+        console.log("Lunch-break is :" + lunchBreak);
         console.log("Rates are : " + rate + ", " + doubletimerate + ", " + overtimerate);
+
         tt = parseInt(totLogged[0]);
         rt = parseInt(totLogged[1]);
         ot = parseInt(totLogged[2]);
         dt = parseInt(totLogged[3]);
         mt = parseInt(totLogged[4]);
+
         console.log("Total logged hours : " + tt);    
         console.log("Regular hours : " + rt);
         console.log("OverTime hours : " + ot);
         console.log("DoubleTime hours : " + dt);  
         console.log("Total minutes : " + mt);
+        
         $('#TotTimes').find('tr').eq(0).find('td').eq(i).text(totLogged[0]);
         $('#HoursDetail').find('tr').eq(0).find('td').eq(i).text(totLogged[1]);
         $('#HoursDetail').find('tr').eq(1).find('td').eq(i).text(totLogged[2]);        
@@ -266,7 +278,7 @@ function calcValues() {
 
     }
 
-    $('#TotalWeekHours').text("xyz");
+    $('#TotalWeekHours').text(weekHours);
 
     $('#TotalPay').text(totalPay);
 
@@ -274,19 +286,42 @@ function calcValues() {
 
 }
 
-function timeDiff(start, end) {
-    start = start.split(":");
-    end = end.split(":");
+function timeDiff(start, end, lunchBreak) {
+
+    start  = start.split(":");
+    end    = end.split(":");
+    var lunchTime = lunchBreak.split(":");
     var startDate = new Date(0, 0, 0, start[0], start[1], 0);
-    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
-    var totalDiff = endDate.getTime() - startDate.getTime();
-    console.log("Time diff is : " + totalDiff);
-    var hours = Math.floor(totalDiff / 1000 / 60 / 60);
-    var tempDiff = totalDiff - hours * 1000 * 60 * 60;
-    var minutes = Math.floor(tempDiff / 1000 / 60);
+    var endDate   = new Date(0, 0, 0, end[0], end[1], 0);
+
+    if(parseInt(lunchTime[0]) == 24)
+        lunchTime[0] = 0;
+
+    var lunchTemp1 = new Date(0, 0, 0, lunchTime[0], lunchTime[1], 0); 
+    var lunchTemp2 = new Date(0, 0, 0, 0, 0, 0); 
+    var totalDiff = endDate.getTime() - startDate.getTime() - (lunchTemp1.getTime() -lunchTemp2.getTime());       
+    var hours     = Math.floor( totalDiff / 1000 / 60 / 60 );// - parseInt(lunchT[0]);      
+    var tempDiff  = totalDiff - hours  * 1000 * 60 * 60;
+    var minutes   = Math.floor( tempDiff / 1000 / 60 );
+
+    console.log("Time diff is : " + tempDiff);
+    /*
+
+    if (( minutes + parseInt(lunchT[1] )) > 59 ){
+        hours   = hours - 1;
+        minutes = Math.abs(minutes - parseInt(lunchT[1]));  
+    } else {
+        minutes =  Math.abs( minutes - parseInt(lunchT[1]) );
+    }
+
     if (hours < 0){
         hours = hours + 24;
-    }    
+    }
+    */
+
+    console.log("Total Hours is : " + hours);
+    console.log("Total Minutes is : " + minutes);
+
     var rtStr = "";
     var otStr = "";
     var dtStr = "";
@@ -470,15 +505,15 @@ function getJSON(XMLHttpRequest) {
                             </tr>
                             <tr>
                                 <th class="BluHdr1">Regular Pay Rate</th>
-                                <td id="BaseRate" class="table-wrapper-small">$0</td>
+                                <td id="BaseRate" class="table-wrapper-small">0</td>
                             </tr>
                             <tr>
                                 <th class="BluHdr2">Overtime Pay Rate</th>
-                                <td id="OverTimeRate">$0</td>
+                                <td id="OverTimeRate">0</td>
                             </tr>
                             <tr>
                                 <th class="BluHdr3">Double time pay rate</th>
-                                <td id="DoubleTimeRate" >$0</td>
+                                <td id="DoubleTimeRate" >0</td>
                             </tr>                          
                     </table> 
                 </div>
@@ -494,7 +529,7 @@ function getJSON(XMLHttpRequest) {
                 </tr>
                 <tr class="BluHdr2">
                     <th>Total Pay</th>
-                    <td id="TotalPay">$0</td>
+                    <td id="TotalPay">0</td>
                 </tr>            
             </table> 
         </div>
